@@ -63,20 +63,17 @@ def main(**kwargs):
         elif winner == BLACK:
             black_wins += 1
         info('game {} complete.'.format(t))
-        message = '{} wins! {}-{}'.format(
-                color_name[winner], white_score, black_score)
+        message = '{} wins! {}-{}'.format(color_name[winner], white_score, black_score)
         info(message)
         summary.append(message)
 
     seconds_spent = time.time() - start
     ms_per_game = (seconds_spent / amount) * 1000
-    print('time: {0:.2f} minutes ({0:.2f}ms per game)'.format(
-        seconds_spent / 60, ms_per_game))
+    print('time: {0:.2f} minutes ({0:.2f}ms per game)'.format(seconds_spent / 60, ms_per_game))
     print('summary: {} games played'.format(len(summary)))
     for each in summary:
         info(each)
-    wins = {'Black': black_wins / (black_wins + white_wins) *
-            100, 'White': white_wins / (black_wins + white_wins) * 100}
+    wins = {'Black': black_wins / (black_wins + white_wins) * 100, 'White': white_wins / (black_wins + white_wins) * 100}
     print('Black won {}%'.format(wins['Black']))
     print('White won {}%'.format(wins['White']))
 

@@ -40,8 +40,7 @@ class Reversi:
             state = self.next_state(state, picked)
             self.print_board(state)
             if not picked:
-                info('{} had no moves and passed their turn.'.format(
-                    color_name[color]))
+                info('{} had no moves and passed their turn.'.format(color_name[color]))
             else:
                 info('{} plays at {}'.format(color_name[color], str(picked)))
             info_newline()

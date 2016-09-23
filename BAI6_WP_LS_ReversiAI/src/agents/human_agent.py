@@ -19,7 +19,7 @@ class HumanAgent(Agent):
             return None
         choice = None
         while True:
-            raw_choice = input('Enter a move x,y: ')
+            raw_choice = raw_input('Enter a move x,y: ')
             if raw_choice == 'pass':
                 return None
             elif raw_choice == 'exit' or raw_choice == 'quit':

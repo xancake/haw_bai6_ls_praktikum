@@ -130,8 +130,7 @@ class MonteLarsoAgent(Agent):
                     return cur_node
                 else:
                     # no moves, so turn passes to other player
-                    next_state = self.reversi.next_state(
-                        cur_node.game_state, None)
+                    next_state = self.reversi.next_state(cur_node.game_state, None)
                     pass_node = Node(next_state, None, 1)
                     cur_node.add_child(pass_node)
                     self.state_node[next_state] = pass_node
@@ -170,8 +169,7 @@ class MonteLarsoAgent(Agent):
                 wins = plays - wins
             _, parent_plays = node.get_wins_plays()
             assert parent_plays > 0
-            values[child] = (wins / plays) \
-                + C * math.sqrt(2 * math.log(parent_plays) / plays)
+            values[child] = (wins / plays) + C * math.sqrt(2 * math.log(parent_plays) / plays)
 
         best_choice = max(values, key=values.get)
         return best_choice
