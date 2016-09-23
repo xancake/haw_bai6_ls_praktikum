@@ -1,0 +1,1 @@
+# haw_bai6_ls_praktikum
