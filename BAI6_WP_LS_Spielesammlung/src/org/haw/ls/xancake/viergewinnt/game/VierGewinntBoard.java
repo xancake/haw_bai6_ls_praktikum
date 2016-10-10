@@ -56,7 +56,7 @@ public class VierGewinntBoard {
 			if(_field[x][y].isEmpty()) {
 				_field[x][y].setOwner(color);
 				int Y = y; // Muss geschehen, da in einem Lambda nur (effektiv) finale lokale Variablen verwendet werden können
-				_dispatcher.fireEvent(l -> l.onTurn(color, x, Y));
+				_dispatcher.fireEvent(l -> l.onMoveMade(color, x, Y));
 				break;
 			}
 			y++;
