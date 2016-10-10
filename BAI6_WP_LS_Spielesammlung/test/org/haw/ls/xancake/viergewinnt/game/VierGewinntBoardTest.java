@@ -2,7 +2,6 @@ package org.haw.ls.xancake.viergewinnt.game;
 
 import static org.junit.Assert.*;
 import java.util.Arrays;
-import org.haw.ls.xancake.viergewinnt.game.VierGewinntBoard;
 import org.haw.ls.xancake.viergewinnt.game.VierGewinntBoard.Color;
 import org.junit.Before;
 import org.junit.Test;
