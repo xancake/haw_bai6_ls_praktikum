@@ -13,6 +13,8 @@ public class GridWorldGame {
 	
 	private PlayableGridWorld _world;
 	private PlayerBehaviour _playerBehaviour;
+	private boolean _run;
+	private boolean _ended;
 	
 	public GridWorldGame(PlayableGridWorld world, PlayerBehaviour playerBehaviour) {
 		_dispatcher = new EventDispatcher<>();
@@ -32,19 +34,25 @@ public class GridWorldGame {
 		return _world;
 	}
 	
+	public boolean hasEnded() {
+		return _ended;
+	}
+	
 	public void start() {
 		_world.getPlayer().setBehaviour(_playerBehaviour);
+		_run = true;
 		gameLoop();
+		_ended = true;
 	}
 	
 	public void stop() {
-		
+		_run = false;
 	}
 	
 	private void gameLoop() {
 		_dispatcher.fireEvent(l -> l.onGameStarted());
 		
-		while(!_world.isPlayerOnFinish()) {
+		while(_run && !_world.isPlayerOnFinish()) {
 			_dispatcher.fireEvent(l -> l.onRoundStarted());
 			
 			List<GridWorldAction> actions = _world.getAllowedActions();

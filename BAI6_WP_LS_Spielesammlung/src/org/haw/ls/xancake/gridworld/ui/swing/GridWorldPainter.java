@@ -81,7 +81,7 @@ public class GridWorldPainter {
 	public Color getFieldColor(GridWorld world, int x, int y) {
 		GridWorldField field = world.getField(x, y);
 		if(world.getStartField() == field) {
-			return Color.RED;
+			return Color.GREEN;
 		}
 		FieldType type = field.getType();
 		if(type == DefaultFieldTypes.EMPTY) {
@@ -90,6 +90,8 @@ public class GridWorldPainter {
 			return Color.BLACK;
 		} else if(type == DefaultFieldTypes.FINISH) {
 			return Color.YELLOW;
+		} else if(type == DefaultFieldTypes.DEATH) {
+			return Color.RED;
 		} else {
 			throw new IllegalArgumentException("Der Feldtyp '" + type + "' wird nicht unterstützt!");
 		}

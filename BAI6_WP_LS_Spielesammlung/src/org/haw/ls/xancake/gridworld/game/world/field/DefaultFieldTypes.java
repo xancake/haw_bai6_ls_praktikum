@@ -4,9 +4,10 @@ import org.haw.ls.xancake.gridworld.game.player.Player;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 
 public enum DefaultFieldTypes implements FieldType {
-	EMPTY(' ', true),
+	EMPTY('_', true),
 	WALL('#', false),
-	FINISH('+', true);
+	FINISH('+', true),
+	DEATH('-', true);
 	
 	private char _symbol;
 	private boolean _canEnter;
@@ -23,11 +24,22 @@ public enum DefaultFieldTypes implements FieldType {
 	
 	@Override
 	public void onEnter(GridWorldField field, Player player) {
-		player.moveTo(field);
+		if(canEnter(field, player)) {
+			player.moveTo(field);
+		}
 	}
 	
 	@Override
 	public String toString() {
 		return String.valueOf(_symbol);
+	}
+	
+	public static DefaultFieldTypes getForSymbol(char symbol) {
+		for(DefaultFieldTypes t : values()) {
+			if(symbol == t._symbol) {
+				return t;
+			}
+		}
+		return null;
 	}
 }

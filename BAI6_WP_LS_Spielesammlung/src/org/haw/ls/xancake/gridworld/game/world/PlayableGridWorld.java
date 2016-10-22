@@ -30,6 +30,11 @@ public interface PlayableGridWorld extends GridWorld {
 	void doPlayerMove(GridWorldAction action);
 	
 	/**
+	 * Setzt den Spieler wieder auf das Startfeld.
+	 */
+	void reset();
+	
+	/**
 	 * Registriert den übergebenen Listener an dieser GridWorld.
 	 * @param listener Der zu registrierende Listener
 	 */

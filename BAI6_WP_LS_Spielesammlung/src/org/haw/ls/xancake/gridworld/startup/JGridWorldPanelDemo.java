@@ -1,29 +1,38 @@
 package org.haw.ls.xancake.gridworld.startup;
 
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileFilter;
 import org.haw.ls.xancake.gridworld.game.GridWorldGame;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
 import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
-import org.haw.ls.xancake.gridworld.game.world.GridWorldImpl;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
+import org.haw.ls.xancake.gridworld.game.world.io.GridWorldIO;
 import org.haw.ls.xancake.gridworld.ui.swing.JGridWorldPanel;
 
 @SuppressWarnings("serial")
 public class JGridWorldPanelDemo extends JFrame {
 	private GridWorldGame _game;
-	private GUIBehaviour _behaviour;
+	private PlayableGridWorld _world;
 	
 	private JGridWorldPanel _worldPanel;
+	private JButton _load;
+	private JButton _reset;
 	private List<JButton> _buttons;
+	
+	private JFileChooser _fileChooser;
 	
 	public JGridWorldPanelDemo() {
 		super("Grid World Panel Demo");
@@ -32,47 +41,101 @@ public class JGridWorldPanelDemo extends JFrame {
 		_worldPanel.setHighlightPossibleActions(true);
 		_worldPanel.setHighlightMouseLocation(true);
 		
-		_behaviour = new GUIBehaviour();
+		_load = new JButton("Load...");
+		_reset = new JButton("Reset");
+		
+		_load.addActionListener(e -> onLoad());
+		_reset.addActionListener(e -> onReset());
+		_reset.setEnabled(false);
+		
+		try {
+			_fileChooser = new JFileChooser(new File(getClass().getClassLoader().getResource("gridworld").toURI()));
+			_fileChooser.setMultiSelectionEnabled(false);
+			_fileChooser.setFileFilter(new FileFilter() {
+				private static final String FILETYPE = ".gridworld";
+				
+				@Override
+				public String getDescription() {
+					return "*" + FILETYPE;
+				}
+				
+				@Override
+				public boolean accept(File f) {
+					return f.isDirectory() || f.getName().endsWith(FILETYPE);
+				}
+			});
+		} catch(URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+		
 		_buttons = new ArrayList<>();
 		for(GridWorldAction action : GridWorldAction.values()) {
-			JButton button = new JButton(action.toString());
-			_behaviour.initActionListener(button, action);
-			_buttons.add(button);
+			_buttons.add(new JButton(action.toString()));
 		}
 		
 		JPanel controls = new JPanel();
-		controls.setLayout(new BoxLayout(controls, BoxLayout.PAGE_AXIS));
+		controls.setLayout(new BoxLayout(controls, BoxLayout.LINE_AXIS));
+		controls.add(_load);
+		controls.add(_reset);
+		controls.add(Box.createHorizontalGlue());
+		
+		JPanel actions = new JPanel();
+		actions.setLayout(new BoxLayout(actions, BoxLayout.PAGE_AXIS));
 		for(JButton button : _buttons) {
-			controls.add(button);
+			actions.add(button);
 		}
-		controls.add(Box.createVerticalGlue());
+		actions.add(Box.createVerticalGlue());
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().add(new JScrollPane(_worldPanel), BorderLayout.CENTER);
-		getContentPane().add(controls, BorderLayout.EAST);
+		getContentPane().add(controls, BorderLayout.NORTH);
+		getContentPane().add(actions, BorderLayout.EAST);
 		pack();
 		setSize(600, 400);
 		setLocationRelativeTo(null);
 	}
 	
-	public void start() {
-		PlayableGridWorld world = initWorld();
-		_worldPanel.setWorld(world);
-		_game = new GridWorldGame(world, _behaviour);
-		setVisible(true);
-		_game.start();
+	private void onLoad() {
+		int choice = _fileChooser.showOpenDialog(this);
+		if(choice == JFileChooser.APPROVE_OPTION) {
+			try {
+				GridWorldIO io = new GridWorldIO();
+				_world = io.loadGridWorld(_fileChooser.getSelectedFile());
+				_worldPanel.setWorld(_world);
+				if(_game != null) {
+					_game.stop();
+				}
+				_game = new GridWorldGame(_world, new GUIBehaviour(_buttons));
+				new Thread(() -> _game.start()).start();
+				_reset.setEnabled(true);
+			} catch(IOException e) {
+				JOptionPane.showMessageDialog(this, e.toString(), e.getMessage(), JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	private void onReset() {
+		if(_world != null) {
+    		_world.reset();
+    		if(_game.hasEnded()) {
+    			_game = new GridWorldGame(_world, new GUIBehaviour(_buttons));
+    			new Thread(() -> _game.start()).start();
+    		}
+		}
 	}
 	
 	private class GUIBehaviour implements PlayerBehaviour {
 		private GridWorldAction _choosenAction;
 		
-		private void initActionListener(JButton button, GridWorldAction action) {
-			button.addActionListener(e -> {
-				GUIBehaviour.this._choosenAction = action;
-				synchronized(GUIBehaviour.this) {
-					GUIBehaviour.this.notify();
-				}
-			});
+		private GUIBehaviour(List<JButton> actionButtons) {
+			for(JButton button : actionButtons) {
+				button.addActionListener(e -> {
+					GUIBehaviour.this._choosenAction = GridWorldAction.valueOf(button.getText());
+					synchronized(GUIBehaviour.this) {
+						GUIBehaviour.this.notify();
+					}
+				});
+			}
 		}
 		
 		@Override
@@ -95,25 +158,7 @@ public class JGridWorldPanelDemo extends JFrame {
 		}
 	}
 	
-	public static void main(String[] args) {
-		new JGridWorldPanelDemo().start();
-	}
-	
-	private static PlayableGridWorld initWorld() {
-		GridWorldImpl world = new GridWorldImpl(7, 6);
-		world.setFieldType(1, 1, DefaultFieldTypes.WALL);
-		world.setFieldType(1, 2, DefaultFieldTypes.WALL);
-		world.setFieldType(1, 3, DefaultFieldTypes.WALL);
-		world.setFieldType(2, 4, DefaultFieldTypes.WALL);
-		world.setFieldType(3, 0, DefaultFieldTypes.WALL);
-		world.setFieldType(3, 2, DefaultFieldTypes.WALL);
-		world.setFieldType(3, 4, DefaultFieldTypes.WALL);
-		world.setFieldType(4, 2, DefaultFieldTypes.WALL);
-		world.setFieldType(4, 4, DefaultFieldTypes.WALL);
-		world.setFieldType(5, 1, DefaultFieldTypes.WALL);
-		world.setFieldType(6, 1, DefaultFieldTypes.WALL);
-		world.setFieldType(6, 0, DefaultFieldTypes.FINISH);
-		world.setStartField(1, 5);
-		return world;
+	public static void main(String[] args) throws Exception {
+		new JGridWorldPanelDemo().setVisible(true);
 	}
 }

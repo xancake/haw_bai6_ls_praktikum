@@ -80,6 +80,12 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	}
 	
 	@Override
+	public void reset() {
+		_player.moveTo(_startField);
+		_dispatcher.fireEvent(l -> l.onPlayerMoved(_player));
+	}
+	
+	@Override
 	public void addListener(GridWorldListener listener) {
 		_dispatcher.addListener(listener);
 	}
@@ -97,7 +103,7 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	@Override
 	public void setStartField(int x, int y) {
 		_startField = _fields[x][y];
-		_player.moveTo(_startField);
+		reset();
 	}
 	
 	@Override
