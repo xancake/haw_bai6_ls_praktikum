@@ -3,20 +3,21 @@ package org.haw.ls.xancake.gridworld.game;
 import java.util.List;
 import java.util.Objects;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
 import org.haw.ls.xancake.gridworld.game.world.GridWorld;
-import org.haw.ls.xancake.util.listener.EventDispatcher;
+import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
+import de.xancake.pattern.listener.EventDispatcher;
 
 public class GridWorldGame {
 	private EventDispatcher<GridWorldGameListener> _dispatcher;
 	
-	private GridWorld _world;
-	private Player _player;
+	private PlayableGridWorld _world;
+	private PlayerBehaviour _playerBehaviour;
 	
-	public GridWorldGame(GridWorld world, Player player) {
+	public GridWorldGame(PlayableGridWorld world, PlayerBehaviour playerBehaviour) {
 		_dispatcher = new EventDispatcher<>();
 		_world = Objects.requireNonNull(world);
-		_player = Objects.requireNonNull(player);
+		_playerBehaviour = Objects.requireNonNull(playerBehaviour);
 	}
 	
 	public void addListener(GridWorldGameListener listener) {
@@ -31,27 +32,24 @@ public class GridWorldGame {
 		return _world;
 	}
 	
-	public Player getPlayer() {
-		return _player;
+	public void start() {
+		_world.getPlayer().setBehaviour(_playerBehaviour);
+		gameLoop();
 	}
 	
-	public void start() {
-		gameLoop();
+	public void stop() {
+		
 	}
 	
 	private void gameLoop() {
 		_dispatcher.fireEvent(l -> l.onGameStarted());
 		
-		_player.moveTo(_world.getStartField());
-		while(!_world.getField(_player.getX(), _player.getY()).isFinish()) {
+		while(!_world.isPlayerOnFinish()) {
 			_dispatcher.fireEvent(l -> l.onRoundStarted());
 			
-			
-			List<GridWorldAction> actions = _world.getAllowedActions(_player);
-			GridWorldAction choosenAction = _player.chooseAction(actions);
-			if(choosenAction.isAllowed(_world, _player)) {
-				choosenAction.execute(_world, _player);
-			}
+			List<GridWorldAction> actions = _world.getAllowedActions();
+			GridWorldAction choosenAction = _world.getPlayer().chooseAction(actions);
+			_world.doPlayerMove(choosenAction);
 			
 			_dispatcher.fireEvent(l -> l.onRoundEnded());
 		}

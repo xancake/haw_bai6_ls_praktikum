@@ -2,18 +2,22 @@ package org.haw.ls.xancake.gridworld.game.world;
 
 import java.util.List;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.field.FieldType;
 import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
+import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
 import org.haw.ls.xancake.gridworld.util.Numbers;
+import de.xancake.pattern.listener.EventDispatcher;
 
-public class GridWorldImpl implements MutableGridWorld {
+public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
+	private EventDispatcher<GridWorldListener> _dispatcher;
 	private int _width;
 	private int _height;
 	private GridWorldField _startField;
 	private GridWorldField[][] _fields;
+	private Player _player;
 	
 	public GridWorldImpl(int width, int height) {
+		_dispatcher = new EventDispatcher<>();
 		_width = Numbers.require(width).greaterThan(0, "Das Spielfeld muss breiter als 0 sein!");
 		_height = Numbers.require(height).greaterThan(0, "Das Spielfeld muss höher als 0 sein!");
 		_fields = new GridWorldField[_width][_height];
@@ -22,6 +26,7 @@ public class GridWorldImpl implements MutableGridWorld {
 				_fields[x][y] = new GridWorldField(x, y, DefaultFieldTypes.EMPTY);
 			}
 		}
+		_player = new Player();
 	}
 	
 	@Override
@@ -50,9 +55,38 @@ public class GridWorldImpl implements MutableGridWorld {
 	}
 	
 	@Override
-	public List<GridWorldAction> getAllowedActions(Player player) {
+	public Player getPlayer() {
+		return _player;
+	}
+	
+	@Override
+	public boolean isPlayerOnFinish() {
+		return getField(_player.getX(), _player.getY()).isFinish();
+	}
+	
+	@Override
+	public List<GridWorldAction> getAllowedActions() {
 		// TODO: man könnte auch alle Aktionen zulassen. Dann müsste der Agent selbst lernen, dass die nichts bringen.
-		return GridWorldAction.getAllowedActions(this, player);
+//		return GridWorldAction.getAllowedActions(this);
+		return GridWorldAction.getAllActions();
+	}
+	
+	@Override
+	public void doPlayerMove(GridWorldAction action) {
+		if(action.isAllowed(this)) {
+			action.execute(this);
+			_dispatcher.fireEvent(l -> l.onPlayerMoved(_player));
+		}
+	}
+	
+	@Override
+	public void addListener(GridWorldListener listener) {
+		_dispatcher.addListener(listener);
+	}
+
+	@Override
+	public void removeListener(GridWorldListener listener) {
+		_dispatcher.removeListener(listener);
 	}
 	
 	@Override
@@ -63,16 +97,21 @@ public class GridWorldImpl implements MutableGridWorld {
 	@Override
 	public void setStartField(int x, int y) {
 		_startField = _fields[x][y];
+		_player.moveTo(_startField);
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		int playerX = _player!=null ? _player.getX() : -1;
+		int playerY = _player!=null ? _player.getY() : -1;
+		
 		// X und Y vertauschen, damit für die Ausgabe die X-Achse horizontal und die Y-Achse vertikal ausgegeben wird
-		// Y von hinten durchgehen, damit der Ursprung unten liegt
-		for(int y=_height-1; y>=0; y--) {
+		for(int y=0; y<_height; y++) {
 			for(int x=0; x<_width; x++) {
-				builder.append("[").append(_fields[x][y]).append("]");
+				builder.append("[")
+						.append((x==playerX && y==playerY) ? "P" : _fields[x][y])
+						.append("]");
 			}
 			builder.append("\n");
 		}

@@ -1,4 +1,4 @@
-package org.haw.ls.xancake.gridworld.game.field;
+package org.haw.ls.xancake.gridworld.game.world.field;
 
 import org.haw.ls.xancake.gridworld.game.player.Player;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;

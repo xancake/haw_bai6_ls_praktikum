@@ -1,4 +1,4 @@
-package org.haw.ls.xancake.gridworld.game.field;
+package org.haw.ls.xancake.gridworld.game.world.field;
 
 import org.haw.ls.xancake.gridworld.game.player.Player;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
@@ -6,7 +6,7 @@ import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 public enum DefaultFieldTypes implements FieldType {
 	EMPTY(' ', true),
 	WALL('#', false),
-	FINISH('*', true);
+	FINISH('+', true);
 	
 	private char _symbol;
 	private boolean _canEnter;
@@ -23,8 +23,7 @@ public enum DefaultFieldTypes implements FieldType {
 	
 	@Override
 	public void onEnter(GridWorldField field, Player player) {
-		player.setX(field.getX());
-		player.setY(field.getY());
+		player.moveTo(field);
 	}
 	
 	@Override

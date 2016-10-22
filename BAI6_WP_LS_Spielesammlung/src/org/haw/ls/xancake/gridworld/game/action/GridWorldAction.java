@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.haw.ls.xancake.gridworld.game.player.Player;
-import org.haw.ls.xancake.gridworld.game.world.GridWorld;
+import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
+import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
 
+/**
+ * Enthält alle Aktionen, die in einer {@link PlayableGridWorld GridWorld} möglich sind.
+ */
 public enum GridWorldAction {
-	UP(0, 1),
+	UP(0, -1),
 	RIGHT(1, 0),
-	DOWN(0, -1),
+	DOWN(0, 1),
 	LEFT(-1, 0);
 	
 	private int _dx;
@@ -20,36 +24,69 @@ public enum GridWorldAction {
 		_dy = dy;
 	}
 	
-	public boolean isAllowed(GridWorld world, Player player) {
+	/**
+	 * Prüft, ob diese Aktion auf der übergebenen {@link PlayableGridWorld Welt} ausgeführt werden kann.
+	 * @param world Die {@link PlayableGridWorld Welt}
+	 * @return {@code true} wenn die Aktion ausgeführt werden kann, ansonsten {@code false}
+	 */
+	public boolean isAllowed(PlayableGridWorld world) {
+		Player player = world.getPlayer();
 		int moveX = player.getX()+_dx;
 		int moveY = player.getY()+_dy;
-		return world.isValidLocation(moveX, moveY)
-				&& world.getField(moveX, moveY).canEnter(player);
+		return world.isValidLocation(moveX, moveY) && world.getField(moveX, moveY).canEnter(player);
 	}
 	
-	public void execute(GridWorld world, Player player) {
-		if(isAllowed(world, player)) {
-			player.setX(player.getX()+_dx);
-			player.setY(player.getY()+_dy);
+	/**
+	 * Führt diese Aktion auf der übergebenen {@link PlayableGridWorld Welt} aus, wenn sie erlaubt ist.
+	 * @param world Die {@link PlayableGridWorld Welt}
+	 * @see #isAllowed(PlayableGridWorld)
+	 */
+	public void execute(PlayableGridWorld world) {
+		if(isAllowed(world)) {
+			GridWorldField field = getResultingField(world);
+			world.getPlayer().moveTo(field);
 		}
 	}
 	
+	/**
+	 * Gibt das {@link GridWorldField Feld} zurück, auf dem der Spieler landen würde, wenn er diese Aktion auf der
+	 * übergebenen {@link PlayableGridWorld Welt} ausführt.
+	 * @param world Die {@link PlayableGridWorld Welt}
+	 * @return Das Feld auf dem der Spieler landen würde oder {@code null}, wenn das resultierende Feld nicht mehr auf
+	 *         der Welt liegt
+	 */
+	public GridWorldField getResultingField(PlayableGridWorld world) {
+		Player player = world.getPlayer();
+		int moveX = player.getX()+_dx;
+		int moveY = player.getY()+_dy;
+		if(world.isValidLocation(moveX, moveY)) {
+			return world.getField(moveX, moveY);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Gibt eine Liste mit allen Aktionen zurück.
+	 * @return Eine Liste mit allen Aktionen
+	 * @see #values()
+	 */
 	public static List<GridWorldAction> getAllActions() {
-		return Arrays.asList(UP, RIGHT, DOWN, LEFT);
+		return Arrays.asList(values());
 	}
 	
-	public static List<GridWorldAction> getAllowedActions(GridWorld world, Player player) {
+	/**
+	 * Gibt eine Liste aller validen Aktionen für den Spieler auf der übergebenen {@link PlayableGridWorld Welt} zurück.
+	 * @param world Die {@link PlayableGridWorld Welt}
+	 * @return Eine Liste mit allen validen Aktionen für die Weltsituation
+	 */
+	public static List<GridWorldAction> getAllowedActions(PlayableGridWorld world) {
 		List<GridWorldAction> actions = new ArrayList<>();
-		addActionIfPossible(world, player, actions, UP);
-		addActionIfPossible(world, player, actions, RIGHT);
-		addActionIfPossible(world, player, actions, DOWN);
-		addActionIfPossible(world, player, actions, LEFT);
-		return actions;
-	}
-	
-	private static void addActionIfPossible(GridWorld world, Player player, List<GridWorldAction> actions, GridWorldAction action) {
-		if(action.isAllowed(world, player)) {
-			actions.add(action);
+		for(GridWorldAction action : values()) {
+			if(action.isAllowed(world)) {
+				actions.add(action);
+			}
 		}
+		return actions;
 	}
 }

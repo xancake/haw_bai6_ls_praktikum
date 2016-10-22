@@ -1,9 +1,5 @@
 package org.haw.ls.xancake.gridworld.game.world;
 
-import java.util.List;
-import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.Player;
-
 public interface GridWorld {
 	/**
 	 * Gibt die Breite der Spielwelt zurück.
@@ -38,11 +34,4 @@ public interface GridWorld {
 	 * @return Das Startfeld
 	 */
 	GridWorldField getStartField();
-	
-	/**
-	 * Gibt die möglichen Aktionen des Spielers zurück.
-	 * @param Player Der Spieler
-	 * @return Die Aktionen, die dem Spieler möglich sind
-	 */
-	List<GridWorldAction> getAllowedActions(Player player);
 }

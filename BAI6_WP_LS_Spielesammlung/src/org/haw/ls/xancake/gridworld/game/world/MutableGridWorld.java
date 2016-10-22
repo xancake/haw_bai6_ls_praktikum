@@ -1,6 +1,6 @@
 package org.haw.ls.xancake.gridworld.game.world;
 
-import org.haw.ls.xancake.gridworld.game.field.FieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
 
 public interface MutableGridWorld extends GridWorld {
 	

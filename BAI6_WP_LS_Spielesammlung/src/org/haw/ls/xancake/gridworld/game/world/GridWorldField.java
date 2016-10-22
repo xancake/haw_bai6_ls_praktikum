@@ -1,9 +1,9 @@
 package org.haw.ls.xancake.gridworld.game.world;
 
 import java.util.Objects;
-import org.haw.ls.xancake.gridworld.game.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.field.FieldType;
 import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
+import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
 import org.haw.ls.xancake.gridworld.util.Numbers;
 
 public class GridWorldField {

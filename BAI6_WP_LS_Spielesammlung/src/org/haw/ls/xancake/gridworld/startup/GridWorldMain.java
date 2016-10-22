@@ -5,29 +5,26 @@ import java.util.Scanner;
 import org.haw.ls.xancake.gridworld.game.GridWorldGame;
 import org.haw.ls.xancake.gridworld.game.GridWorldGameListener;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.player.Player;
 import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
-import org.haw.ls.xancake.gridworld.game.world.GridWorld;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldImpl;
-import org.haw.ls.xancake.gridworld.game.world.MutableGridWorld;
+import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
 
 public class GridWorldMain {
 	private static Scanner _keyboard;
-	private static GridWorld _world;
+	private static PlayableGridWorld _world;
 	
 	public static void main(String[] args) {
 		_keyboard = new Scanner(System.in);
 		_world = initWorld();
-		Player player = new Player(new CLIBehaviour());
-		GridWorldGame game = new GridWorldGame(_world, player);
+		GridWorldGame game = new GridWorldGame(_world, new CLIBehaviour());
 		game.addListener(new CLIGameListener());
 		game.start();
 	}
 	
-	private static GridWorld initWorld() {
-		MutableGridWorld world = new GridWorldImpl(5, 4);
-		world.setStartField(0, 0);
+	private static PlayableGridWorld initWorld() {
+		GridWorldImpl world = new GridWorldImpl(5, 4);
+		world.setStartField(0, 1);
 		world.setFieldType(1, 1, DefaultFieldTypes.WALL);
 		world.setFieldType(1, 2, DefaultFieldTypes.WALL);
 		world.setFieldType(3, 1, DefaultFieldTypes.WALL);
@@ -40,7 +37,7 @@ public class GridWorldMain {
 	private static class CLIBehaviour implements PlayerBehaviour {
 		@Override
 		public GridWorldAction chooseAction(List<GridWorldAction> availableActions) {
-			System.out.println(_world.toString());
+			System.out.println(_world);
 			GridWorldAction action;
 			do {
 				System.out.print("Aktion: ");
@@ -59,7 +56,8 @@ public class GridWorldMain {
 
 		@Override
 		public void onGameEnded() {
-			
+			System.out.println(_world);
+			System.out.println("Game Over!");
 		}
 
 		@Override
