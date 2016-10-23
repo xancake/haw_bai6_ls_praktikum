@@ -3,7 +3,7 @@ package org.haw.ls.xancake.viergewinnt.game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.haw.ls.xancake.util.listener.EventDispatcher;
+import de.xancake.pattern.listener.EventDispatcher;
 
 public class VierGewinntBoard {
 	private EventDispatcher<VierGewinntBoardListener> _dispatcher = new EventDispatcher<>();

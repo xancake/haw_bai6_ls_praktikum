@@ -131,17 +131,44 @@ public class VierGewinntBoardCheckTest {
 	}
 	
 	/**
-	 * Prüft die beiden Methoden
-	 * <ul>
-	 * 	<li>
-	 * 	<li>
-	 * </ul>
-	 * @param expected
-	 * @param actual
-	 * @param x
-	 * @param y
+	 * [ ][ ][ ][O][ ][ ][ ]
+	 * [ ][ ][ ][X][X][ ][ ]
+	 * [X][ ][O][X][X][ ][ ]
+	 * [O][ ][X][X][O][ ][ ]
+	 * [O][X][X][O][X][ ][ ]
+	 * [O][O][O][X][O][X][O]
 	 */
+	@Test
+	public void testCheckForWin_DiagonallyUp_Complex() {
+		b.makeMove(Color.X, 3);
+		b.makeMove(Color.O, 4);
+		b.makeMove(Color.X, 4);
+		b.makeMove(Color.O, 3);
+		b.makeMove(Color.X, 5);
+		b.makeMove(Color.O, 1);
+		b.makeMove(Color.X, 3);
+		b.makeMove(Color.O, 4);
+		b.makeMove(Color.X, 4);
+		b.makeMove(Color.O, 0);
+		b.makeMove(Color.X, 3);
+		b.makeMove(Color.O, 2);
+		b.makeMove(Color.X, 4);
+		b.makeMove(Color.O, 0);
+		b.makeMove(Color.X, 3);
+		b.makeMove(Color.O, 3);
+		b.makeMove(Color.X, 2);
+		b.makeMove(Color.O, 0);
+		b.makeMove(Color.X, 0);
+		b.makeMove(Color.O, 6);
+		b.makeMove(Color.X, 2);
+		b.makeMove(Color.O, 2);
+		b.makeMove(Color.X, 1);
+		
+		assertWin(Color.X, Color.X, 1, 1);
+	}
+	
 	private void assertWin(Color expected, Color actual, int x, int y) {
+		assertEquals(expected==actual, VierGewinntBoardCheck.isFourInARow(b, actual, x, y));
 		assertEquals(expected==actual, VierGewinntBoardCheck.checkFourInARow(b, actual, x, y));
 		assertEquals(expected, VierGewinntBoardCheck.checkForWin(b));
 	}

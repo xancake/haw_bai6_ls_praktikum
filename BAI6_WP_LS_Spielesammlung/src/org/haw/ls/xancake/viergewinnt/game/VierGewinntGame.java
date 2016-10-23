@@ -2,9 +2,9 @@ package org.haw.ls.xancake.viergewinnt.game;
 
 import java.util.List;
 import java.util.Objects;
-import org.haw.ls.xancake.util.listener.EventDispatcher;
 import org.haw.ls.xancake.viergewinnt.game.VierGewinntBoard.Color;
 import org.haw.ls.xancake.viergewinnt.player.VierGewinntPlayer;
+import de.xancake.pattern.listener.EventDispatcher;
 
 public class VierGewinntGame {
 	private EventDispatcher<VierGewinntGameListener> _dispatcher;
@@ -40,17 +40,18 @@ public class VierGewinntGame {
 	private void gameLoop() {
 		_dispatcher.fireEvent(l -> l.onGameStart());
 		while(_play && !_board.isGameOver()) {
-			doPlayerTurn(_player1);
+			_dispatcher.fireEvent(l -> l.onRoundStart());
 			
-			// Schneller Ausstieg, damit nach dem Zug von Spieler 1 erkannt werden kann, dass das Spiel vorbei ist,
-			// Wenn er gewonnen hat. Damit dann nicht noch Spieler 2 seinen Zug machen muss, steigen wir hier aus.
-			if(_board.isGameOver()) {
-				break;
+			doPlayerTurn(_player1);
+			if(!_board.isGameOver()) {
+				// Wenn das Spiel nach dem Zug von Spieler 1 vorbei ist, darf Spieler 2 keinen Zug mehr machen
+				doPlayerTurn(_player2);
 			}
 			
-			doPlayerTurn(_player2);
+			_dispatcher.fireEvent(l -> l.onRoundEnd());
 		}
-		_dispatcher.fireEvent(l -> l.onGameEnd());
+		// TODO: Nicht die Color sondern den VierGewinntPlayer übergeben
+		_dispatcher.fireEvent(l -> l.onGameEnd(_board.getWinner()));
 	}
 	
 	private void doPlayerTurn(VierGewinntPlayer player) {

@@ -12,6 +12,40 @@ public class VierGewinntBoardCheck {
 	 * wenn die Methode {@code true} liefert die übergebene {@link Color Farbe} damit gewonnen hat.
 	 * @param board Das {@link VierGewinntBoard Board} das geprüft werden soll
 	 * @param color Die {@link Color Farbe}, die den letzten Zug gemacht hat
+	 * @param row Die Spalte des letzten Zugs
+	 * @param col Die Zeile des letzten Zugs
+	 * @return {@code true}, wenn {@code color} durch den Zug gewinnt, ansonsten {@code false}
+	 */
+	public static boolean isFourInARow(VierGewinntBoard board, Color color, int row, int col) {
+		for(CheckDirection direction : CheckDirection.values()) {
+			if(didWin(board, color, row, col, direction)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean didWin(VierGewinntBoard board, Color color, int row, int col, CheckDirection direction) {
+		for(int count=0; count<4; count++) {
+			if(row < 0 || row >= board.getRows() || col < 0 || col >= board.getCols()) {
+				return false;
+			}
+			Field field = board.getField(row, col);
+			if(color != field.getOwner()) {
+				return false;
+			}
+			row += direction.getRowDelta();
+			col += direction.getColumnDelta();
+		}
+		return true;
+	}
+	
+	/**
+	 * Prüft, ob durch den letzten Zug vier in einer Reihe entstanden sind.
+	 * <p>Bei dem Check wird nur die übergebene {@link Color Farbe} geprüft. Dadurch kann direkt gefolgert werden, dass
+	 * wenn die Methode {@code true} liefert die übergebene {@link Color Farbe} damit gewonnen hat.
+	 * @param board Das {@link VierGewinntBoard Board} das geprüft werden soll
+	 * @param color Die {@link Color Farbe}, die den letzten Zug gemacht hat
 	 * @param x Die Spalte des letzten Zugs
 	 * @param y Die Zeile des letzten Zugs
 	 * @return {@code true}, wenn {@code color} durch den Zug gewinnt, ansonsten {@code false}
@@ -231,6 +265,33 @@ public class VierGewinntBoardCheck {
 		public FourInARowCheckResult(Color winner) {
 			this.gameOver = true;
 			this.winner = winner;
+		}
+	}
+	
+	public enum CheckDirection {
+		NORTH(0, 1),
+		NORTH_EAST(1, 1),
+		EAST(1, 0),
+		SOUTH_EAST(1, -1),
+		SOUTH(0, -1),
+		SOUTH_WEST(-1, -1),
+		WEST(-1, 0),
+		NORTH_WEST(-1, 1);
+		
+		private int _deltaRow;
+		private int _deltaCol;
+		
+		private CheckDirection(int deltaRow, int deltaColumn) {
+			_deltaRow = deltaRow;
+			_deltaCol = deltaColumn;
+		}
+		
+		public int getRowDelta() {
+			return _deltaRow;
+		}
+		
+		public int getColumnDelta() {
+			return _deltaCol;
 		}
 	}
 }
