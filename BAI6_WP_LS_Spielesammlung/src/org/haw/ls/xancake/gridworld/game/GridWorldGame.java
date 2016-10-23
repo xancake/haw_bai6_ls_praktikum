@@ -52,7 +52,7 @@ public class GridWorldGame {
 	private void gameLoop() {
 		_dispatcher.fireEvent(l -> l.onGameStarted());
 		
-		while(_run && !_world.isPlayerOnFinish()) {
+		while(_run && !_world.isGameOver()) {
 			_dispatcher.fireEvent(l -> l.onRoundStarted());
 			
 			List<GridWorldAction> actions = _world.getAllowedActions();

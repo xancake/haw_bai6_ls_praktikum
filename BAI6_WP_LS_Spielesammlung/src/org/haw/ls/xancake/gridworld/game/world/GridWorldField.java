@@ -33,16 +33,16 @@ public class GridWorldField {
 		return _type == DefaultFieldType.FINISH;
 	}
 	
+	public GridWorldFieldType getType() {
+		return _type;
+	}
+	
 	public boolean canEnter(GridWorldPlayer player) {
 		return _type.canEnter(this, player);
 	}
 	
 	public void enter(GridWorldPlayer player) {
 		_type.onEnter(this, player);
-	}
-	
-	public GridWorldFieldType getType() {
-		return _type;
 	}
 	
 	void setFieldType(GridWorldFieldType type) {

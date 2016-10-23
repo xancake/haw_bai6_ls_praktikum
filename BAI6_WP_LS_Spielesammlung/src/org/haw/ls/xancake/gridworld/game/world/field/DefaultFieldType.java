@@ -7,14 +7,20 @@ public enum DefaultFieldType implements GridWorldFieldType {
 	EMPTY('_', true),
 	WALL('#', false),
 	FINISH('+', true),
-	DEATH('-', true);
+	DEATH('-', true, (f, p) -> p.setDead(true));
 	
 	private char _symbol;
 	private boolean _canEnter;
+	private FieldBehaviour _behaviour;
 	
 	private DefaultFieldType(char symbol, boolean canEnter) {
+		this(symbol, canEnter, null);
+	}
+	
+	private DefaultFieldType(char symbol, boolean canEnter, FieldBehaviour behaviour) {
 		_symbol = symbol;
 		_canEnter = canEnter;
+		_behaviour = behaviour;
 	}
 	
 	@Override
@@ -24,8 +30,8 @@ public enum DefaultFieldType implements GridWorldFieldType {
 	
 	@Override
 	public void onEnter(GridWorldField field, GridWorldPlayer player) {
-		if(canEnter(field, player)) {
-			player.moveTo(field);
+		if(_behaviour != null) {
+			_behaviour.onEnter(field, player);
 		}
 	}
 	
@@ -41,5 +47,9 @@ public enum DefaultFieldType implements GridWorldFieldType {
 			}
 		}
 		return null;
+	}
+	
+	private interface FieldBehaviour {
+		void onEnter(GridWorldField field, GridWorldPlayer player);
 	}
 }

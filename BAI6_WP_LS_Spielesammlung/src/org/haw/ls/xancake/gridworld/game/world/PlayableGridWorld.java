@@ -12,10 +12,13 @@ public interface PlayableGridWorld extends GridWorld {
 	GridWorldPlayer getPlayer();
 	
 	/**
-	 * Gibt zurück, ob sich der Spieler auf einem Zielfeld befindet.
-	 * @return {@code true} wenn sich der Spieler auf einem Zielfeld befindet, ansonsten {@code false}
+	 * Gibt zurück, ob das Spiel vorbei ist. Das Spiel ist entweder vorbei wenn der Spieler ein Zielfeld erreicht hat
+	 * oder gestorben ist.
+	 * @return {@code true} wenn das Spiel vorbei ist, ansonsten {@code false}
+	 * @see GridWorldPlayer#isOnFinish()
+	 * @see GridWorldPlayer#isDead()
 	 */
-	boolean isPlayerOnFinish();
+	boolean isGameOver();
 	
 	/**
 	 * Gibt die möglichen Aktionen des Spielers für die aktuelle Weltsituation zurück.

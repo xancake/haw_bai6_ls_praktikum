@@ -8,28 +8,12 @@ import de.xancake.pattern.listener.EventDispatcher;
 
 public class GridWorldPlayer {
 	private EventDispatcher<GridWorldPlayerListener> _dispatcher;
-	private int _x;
-	private int _y;
 	private GridWorldPlayerBehaviour _behaviour;
+	private GridWorldField _field;
+	private boolean _dead;
 	
 	public GridWorldPlayer() {
 		_dispatcher = new EventDispatcher<>();
-	}
-	
-	public int getX() {
-		return _x;
-	}
-	
-	public int getY() {
-		return _y;
-	}
-	
-	public void moveTo(GridWorldField field) {
-		int oldX = _x;
-		int oldY = _y;
-		_x = field.getX();
-		_y = field.getY();
-		_dispatcher.fireEvent(l -> l.onMove(this, oldX, oldY, _x, _y));
 	}
 	
 	public GridWorldPlayerBehaviour getBehaviour() {
@@ -38,6 +22,44 @@ public class GridWorldPlayer {
 	
 	public void setBehaviour(GridWorldPlayerBehaviour behaviour) {
 		_behaviour = Objects.requireNonNull(behaviour);
+	}
+	
+	public GridWorldField getField() {
+		return _field;
+	}
+	
+	public int getX() {
+		return _field.getX();
+	}
+	
+	public int getY() {
+		return _field.getY();
+	}
+	
+	public boolean isOnFinish() {
+		return _field.isFinish();
+	}
+	
+	public boolean isDead() {
+		return _dead;
+	}
+	
+	public void moveTo(GridWorldField field) {
+		if(field.canEnter(this)) {
+    		GridWorldField oldField = _field;
+    		_field = Objects.requireNonNull(field);
+    		if(oldField != null) {
+    			_dispatcher.fireEvent(l -> l.onMove(this, oldField.getX(), oldField.getY(), _field.getX(), _field.getY()));
+    		}
+    		_field.enter(this);
+		}
+	}
+	
+	public void setDead(boolean dead) {
+		_dead = dead;
+		if(_dead) {
+			_dispatcher.fireEvent(l -> l.onHasDied(this));
+		}
 	}
 	
 	public void addListener(GridWorldPlayerListener listener) {

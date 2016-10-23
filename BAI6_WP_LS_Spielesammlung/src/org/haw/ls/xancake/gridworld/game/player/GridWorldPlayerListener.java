@@ -10,4 +10,10 @@ public interface GridWorldPlayerListener {
 	 * @param yTo Die neue Y-Koordinate
 	 */
 	void onMove(GridWorldPlayer player, int xFrom, int yFrom, int xTo, int yTo);
+	
+	/**
+	 * Wird aufgerufen, wenn der Spieler gestorben ist.
+	 * @param player Der Spieler
+	 */
+	void onHasDied(GridWorldPlayer player);
 }

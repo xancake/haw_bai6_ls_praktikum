@@ -60,8 +60,8 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	}
 	
 	@Override
-	public boolean isPlayerOnFinish() {
-		return getField(_player.getX(), _player.getY()).isFinish();
+	public boolean isGameOver() {
+		return _player.isOnFinish() || _player.isDead();
 	}
 	
 	@Override
@@ -82,6 +82,7 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	@Override
 	public void reset() {
 		_player.moveTo(_startField);
+		_player.setDead(false);
 		_dispatcher.fireEvent(l -> l.onPlayerMoved(this, _player));
 	}
 	
@@ -109,14 +110,13 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		int playerX = _player!=null ? _player.getX() : -1;
-		int playerY = _player!=null ? _player.getY() : -1;
-		
+		GridWorldField playerField = _player.getField();
 		// X und Y vertauschen, damit für die Ausgabe die X-Achse horizontal und die Y-Achse vertikal ausgegeben wird
 		for(int y=0; y<_height; y++) {
 			for(int x=0; x<_width; x++) {
+				GridWorldField field = _fields[x][y];
 				builder.append("[")
-						.append((x==playerX && y==playerY) ? "P" : _fields[x][y])
+						.append(field.equals(playerField) ? "P" : field)
 						.append("]");
 			}
 			builder.append("\n");
