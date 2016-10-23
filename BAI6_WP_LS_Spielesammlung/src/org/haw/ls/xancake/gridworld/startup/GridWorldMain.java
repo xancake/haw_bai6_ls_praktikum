@@ -5,10 +5,10 @@ import java.util.Scanner;
 import org.haw.ls.xancake.gridworld.game.GridWorldGame;
 import org.haw.ls.xancake.gridworld.game.GridWorldGameListener;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayerBehaviour;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldImpl;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldType;
 
 public class GridWorldMain {
 	private static Scanner _keyboard;
@@ -25,16 +25,16 @@ public class GridWorldMain {
 	private static PlayableGridWorld initWorld() {
 		GridWorldImpl world = new GridWorldImpl(5, 4);
 		world.setStartField(0, 1);
-		world.setFieldType(1, 1, DefaultFieldTypes.WALL);
-		world.setFieldType(1, 2, DefaultFieldTypes.WALL);
-		world.setFieldType(3, 1, DefaultFieldTypes.WALL);
-		world.setFieldType(3, 3, DefaultFieldTypes.WALL);
-		world.setFieldType(4, 0, DefaultFieldTypes.WALL);
-		world.setFieldType(4, 3, DefaultFieldTypes.FINISH);
+		world.setFieldType(1, 1, DefaultFieldType.WALL);
+		world.setFieldType(1, 2, DefaultFieldType.WALL);
+		world.setFieldType(3, 1, DefaultFieldType.WALL);
+		world.setFieldType(3, 3, DefaultFieldType.WALL);
+		world.setFieldType(4, 0, DefaultFieldType.WALL);
+		world.setFieldType(4, 3, DefaultFieldType.FINISH);
 		return world;
 	}
 	
-	private static class CLIBehaviour implements PlayerBehaviour {
+	private static class CLIBehaviour implements GridWorldPlayerBehaviour {
 		@Override
 		public GridWorldAction chooseAction(List<GridWorldAction> availableActions) {
 			System.out.println(_world);

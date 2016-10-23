@@ -6,13 +6,13 @@ import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 import de.xancake.pattern.listener.EventDispatcher;
 
-public class Player {
-	private EventDispatcher<PlayerListener> _dispatcher;
+public class GridWorldPlayer {
+	private EventDispatcher<GridWorldPlayerListener> _dispatcher;
 	private int _x;
 	private int _y;
-	private PlayerBehaviour _behaviour;
+	private GridWorldPlayerBehaviour _behaviour;
 	
-	public Player() {
+	public GridWorldPlayer() {
 		_dispatcher = new EventDispatcher<>();
 	}
 	
@@ -32,19 +32,19 @@ public class Player {
 		_dispatcher.fireEvent(l -> l.onMove(this, oldX, oldY, _x, _y));
 	}
 	
-	public PlayerBehaviour getBehaviour() {
+	public GridWorldPlayerBehaviour getBehaviour() {
 		return _behaviour;
 	}
 	
-	public void setBehaviour(PlayerBehaviour behaviour) {
+	public void setBehaviour(GridWorldPlayerBehaviour behaviour) {
 		_behaviour = Objects.requireNonNull(behaviour);
 	}
 	
-	public void addListener(PlayerListener listener) {
+	public void addListener(GridWorldPlayerListener listener) {
 		_dispatcher.addListener(listener);
 	}
 	
-	public void removeListener(PlayerListener listener) {
+	public void removeListener(GridWorldPlayerListener listener) {
 		_dispatcher.removeListener(listener);
 	}
 	
@@ -52,8 +52,8 @@ public class Player {
 	 * Veranlasst den Spieler eine Aktion zu wählen.
 	 * @param availableActions Eine Liste seiner möglichen Aktionen
 	 * @return Die ausgewählte Aktion
-	 * @throws NullPointerException, wenn vorher kein {@link PlayerBehaviour} gesetzt wurde
-	 * @see #setBehaviour(PlayerBehaviour)
+	 * @throws NullPointerException, wenn vorher kein {@link GridWorldPlayerBehaviour} gesetzt wurde
+	 * @see #setBehaviour(GridWorldPlayerBehaviour)
 	 */
 	public GridWorldAction chooseAction(List<GridWorldAction> availableActions) {
 		return _behaviour.chooseAction(availableActions);

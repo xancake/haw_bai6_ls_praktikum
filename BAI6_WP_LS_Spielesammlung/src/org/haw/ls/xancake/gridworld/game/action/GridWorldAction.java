@@ -3,7 +3,7 @@ package org.haw.ls.xancake.gridworld.game.action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
 
@@ -30,7 +30,7 @@ public enum GridWorldAction {
 	 * @return {@code true} wenn die Aktion ausgeführt werden kann, ansonsten {@code false}
 	 */
 	public boolean isAllowed(PlayableGridWorld world) {
-		Player player = world.getPlayer();
+		GridWorldPlayer player = world.getPlayer();
 		int moveX = player.getX()+_dx;
 		int moveY = player.getY()+_dy;
 		return world.isValidLocation(moveX, moveY) && world.getField(moveX, moveY).canEnter(player);
@@ -56,7 +56,7 @@ public enum GridWorldAction {
 	 *         der Welt liegt
 	 */
 	public GridWorldField getResultingField(PlayableGridWorld world) {
-		Player player = world.getPlayer();
+		GridWorldPlayer player = world.getPlayer();
 		int moveX = player.getX()+_dx;
 		int moveY = player.getY()+_dy;
 		if(world.isValidLocation(moveX, moveY)) {

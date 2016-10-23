@@ -3,8 +3,8 @@ package org.haw.ls.xancake.gridworld.game.world.io;
 import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import org.haw.ls.xancake.gridworld.game.world.GridWorld;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.GridWorldFieldType;
 import org.junit.Test;
 
 public class GridWorldIOTest {
@@ -14,7 +14,7 @@ public class GridWorldIOTest {
 				"gridworld/5x3_empty.gridworld",
 				5, 3,
 				0, 2,
-				field(4, 0, DefaultFieldTypes.FINISH)
+				field(4, 0, DefaultFieldType.FINISH)
 		);
 	}
 	
@@ -24,10 +24,10 @@ public class GridWorldIOTest {
 				"gridworld/5x3_cliff.gridworld",
 				5, 3,
 				0, 2,
-				field(1, 2, DefaultFieldTypes.DEATH),
-				field(2, 2, DefaultFieldTypes.DEATH),
-				field(3, 2, DefaultFieldTypes.DEATH),
-				field(4, 2, DefaultFieldTypes.FINISH)
+				field(1, 2, DefaultFieldType.DEATH),
+				field(2, 2, DefaultFieldType.DEATH),
+				field(3, 2, DefaultFieldType.DEATH),
+				field(4, 2, DefaultFieldType.FINISH)
 		);
 	}
 	
@@ -37,18 +37,18 @@ public class GridWorldIOTest {
 				"gridworld/7x6_maze.gridworld",
 				7, 6,
 				1, 5,
-				field(3, 0, DefaultFieldTypes.WALL),
-				field(6, 0, DefaultFieldTypes.FINISH),
-				field(1, 1, DefaultFieldTypes.WALL),
-				field(5, 1, DefaultFieldTypes.WALL),
-				field(6, 1, DefaultFieldTypes.WALL),
-				field(1, 2, DefaultFieldTypes.WALL),
-				field(3, 2, DefaultFieldTypes.WALL),
-				field(4, 2, DefaultFieldTypes.WALL),
-				field(1, 3, DefaultFieldTypes.WALL),
-				field(2, 4, DefaultFieldTypes.WALL),
-				field(3, 4, DefaultFieldTypes.WALL),
-				field(4, 4, DefaultFieldTypes.WALL)
+				field(3, 0, DefaultFieldType.WALL),
+				field(6, 0, DefaultFieldType.FINISH),
+				field(1, 1, DefaultFieldType.WALL),
+				field(5, 1, DefaultFieldType.WALL),
+				field(6, 1, DefaultFieldType.WALL),
+				field(1, 2, DefaultFieldType.WALL),
+				field(3, 2, DefaultFieldType.WALL),
+				field(4, 2, DefaultFieldType.WALL),
+				field(1, 3, DefaultFieldType.WALL),
+				field(2, 4, DefaultFieldType.WALL),
+				field(3, 4, DefaultFieldType.WALL),
+				field(4, 4, DefaultFieldType.WALL)
 		);
 	}
 	
@@ -65,7 +65,7 @@ public class GridWorldIOTest {
 		assertEquals(expectedStartY, world.getStartField().getY());
 		for(int x=0; x<world.getWidth(); x++) {
 			for(int y=0; y<world.getHeight(); y++) {
-				FieldExpectation tester = new FieldExpectation(x, y, DefaultFieldTypes.EMPTY);
+				FieldExpectation tester = new FieldExpectation(x, y, DefaultFieldType.EMPTY);
 				for(FieldExpectation t : expectedFields) {
 					if(t._x == x && t._y == y) {
 						tester = t;
@@ -81,16 +81,16 @@ public class GridWorldIOTest {
 		}
 	}
 	
-	private FieldExpectation field(int x, int y, FieldType type) {
+	private FieldExpectation field(int x, int y, GridWorldFieldType type) {
 		return new FieldExpectation(x, y, type);
 	}
 	
 	private class FieldExpectation {
 		private int _x;
 		private int _y;
-		private FieldType _type;
+		private GridWorldFieldType _type;
 		
-		private FieldExpectation(int x, int y, FieldType type) {
+		private FieldExpectation(int x, int y, GridWorldFieldType type) {
 			_x = x;
 			_y = y;
 			_type = type;

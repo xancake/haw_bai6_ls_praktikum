@@ -2,14 +2,14 @@ package org.haw.ls.xancake.gridworld.game.world;
 
 import java.util.List;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
 
 public interface PlayableGridWorld extends GridWorld {
 	/**
 	 * Gibt den Spieler zurück.
 	 * @return Der Spieler
 	 */
-	Player getPlayer();
+	GridWorldPlayer getPlayer();
 	
 	/**
 	 * Gibt zurück, ob sich der Spieler auf einem Zielfeld befindet.

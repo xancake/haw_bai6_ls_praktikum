@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
 import org.haw.ls.xancake.gridworld.game.world.GridWorld;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldListener;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
@@ -116,7 +116,6 @@ public class JGridWorldPanel extends JPanel implements GridWorldPanel, GridWorld
 			_painter.drawPossibleActions(g2, _world, _gridSize);
 		}
 		
-		
 		if(isHighlightMouseLocation()) {
 			drawMouseHighlight(g2);
 		}
@@ -133,7 +132,7 @@ public class JGridWorldPanel extends JPanel implements GridWorldPanel, GridWorld
 	}
 	
 	@Override
-	public void onPlayerMoved(Player player) {
+	public void onPlayerMoved(GridWorldPlayer player) {
 		repaint();
 	}
 }

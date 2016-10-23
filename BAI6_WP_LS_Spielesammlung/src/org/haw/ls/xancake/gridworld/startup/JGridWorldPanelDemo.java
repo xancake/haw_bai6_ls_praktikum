@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileFilter;
 import org.haw.ls.xancake.gridworld.game.GridWorldGame;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayerBehaviour;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
 import org.haw.ls.xancake.gridworld.game.world.io.GridWorldIO;
 import org.haw.ls.xancake.gridworld.ui.swing.JGridWorldPanel;
@@ -124,7 +124,7 @@ public class JGridWorldPanelDemo extends JFrame {
 		}
 	}
 	
-	private class GUIBehaviour implements PlayerBehaviour {
+	private class GUIBehaviour implements GridWorldPlayerBehaviour {
 		private GridWorldAction _choosenAction;
 		
 		private GUIBehaviour(List<JButton> actionButtons) {

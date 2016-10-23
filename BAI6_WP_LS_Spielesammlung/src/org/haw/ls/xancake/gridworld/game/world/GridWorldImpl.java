@@ -2,9 +2,9 @@ package org.haw.ls.xancake.gridworld.game.world;
 
 import java.util.List;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.Player;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.GridWorldFieldType;
 import org.haw.ls.xancake.gridworld.util.Numbers;
 import de.xancake.pattern.listener.EventDispatcher;
 
@@ -14,7 +14,7 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	private int _height;
 	private GridWorldField _startField;
 	private GridWorldField[][] _fields;
-	private Player _player;
+	private GridWorldPlayer _player;
 	
 	public GridWorldImpl(int width, int height) {
 		_dispatcher = new EventDispatcher<>();
@@ -23,10 +23,10 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 		_fields = new GridWorldField[_width][_height];
 		for(int x=0; x<_width; x++) {
 			for(int y=0; y<_height; y++) {
-				_fields[x][y] = new GridWorldField(x, y, DefaultFieldTypes.EMPTY);
+				_fields[x][y] = new GridWorldField(x, y, DefaultFieldType.EMPTY);
 			}
 		}
-		_player = new Player();
+		_player = new GridWorldPlayer();
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	}
 	
 	@Override
-	public Player getPlayer() {
+	public GridWorldPlayer getPlayer() {
 		return _player;
 	}
 	
@@ -96,7 +96,7 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	}
 	
 	@Override
-	public void setFieldType(int x, int y, FieldType type) {
+	public void setFieldType(int x, int y, GridWorldFieldType type) {
 		_fields[x][y].setFieldType(type);
 	}
 	

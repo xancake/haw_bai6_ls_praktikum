@@ -17,8 +17,8 @@ import org.haw.ls.xancake.gridworld.game.world.GridWorld;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldImpl;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.GridWorldFieldType;
 
 public class GridWorldIO {
 	private static final String KEYWORD_GRIDWORLD = "gridworld";
@@ -73,7 +73,7 @@ public class GridWorldIO {
 			String line = scanner.next();
 			for(int x=0; x<world.getWidth(); x++) {
 				char symbol = line.charAt(x);
-				FieldType type = DefaultFieldTypes.getForSymbol(symbol);
+				GridWorldFieldType type = DefaultFieldType.getForSymbol(symbol);
 				world.setFieldType(x, y, type);
 			}
 			scanner.nextLine();

@@ -3,12 +3,12 @@ package org.haw.ls.xancake.gridworld.ui.swing;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
 import org.haw.ls.xancake.gridworld.game.world.GridWorld;
 import org.haw.ls.xancake.gridworld.game.world.GridWorldField;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
-import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldTypes;
-import org.haw.ls.xancake.gridworld.game.world.field.FieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.DefaultFieldType;
+import org.haw.ls.xancake.gridworld.game.world.field.GridWorldFieldType;
 
 public class GridWorldPainter {
 	
@@ -58,14 +58,14 @@ public class GridWorldPainter {
 	
 	public void drawPlayerIfThere(Graphics2D g, GridWorld world, int x, int y, int gridSize) {
 		if(world instanceof PlayableGridWorld) {
-    		Player player = ((PlayableGridWorld)world).getPlayer();
+    		GridWorldPlayer player = ((PlayableGridWorld)world).getPlayer();
     		if(x==player.getX() && y==player.getY()) {
     			drawPlayer(g, player, gridSize);
     		}
     	}
 	}
 	
-	public void drawPlayer(Graphics2D g, Player player, int gridSize) {
+	public void drawPlayer(Graphics2D g, GridWorldPlayer player, int gridSize) {
 		int s = (int)(gridSize*0.25);
 		int x = player.getX()*gridSize + s/2;
 		int y = player.getY()*gridSize + s/2;
@@ -83,14 +83,14 @@ public class GridWorldPainter {
 		if(world.getStartField() == field) {
 			return Color.GREEN;
 		}
-		FieldType type = field.getType();
-		if(type == DefaultFieldTypes.EMPTY) {
+		GridWorldFieldType type = field.getType();
+		if(type == DefaultFieldType.EMPTY) {
 			return new Color(220, 220, 220);
-		} else if(type == DefaultFieldTypes.WALL) {
+		} else if(type == DefaultFieldType.WALL) {
 			return Color.BLACK;
-		} else if(type == DefaultFieldTypes.FINISH) {
+		} else if(type == DefaultFieldType.FINISH) {
 			return Color.YELLOW;
-		} else if(type == DefaultFieldTypes.DEATH) {
+		} else if(type == DefaultFieldType.DEATH) {
 			return Color.RED;
 		} else {
 			throw new IllegalArgumentException("Der Feldtyp '" + type + "' wird nicht unterstützt!");

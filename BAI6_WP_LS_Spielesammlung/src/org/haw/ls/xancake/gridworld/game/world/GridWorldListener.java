@@ -1,15 +1,15 @@
 package org.haw.ls.xancake.gridworld.game.world;
 
-import org.haw.ls.xancake.gridworld.game.player.Player;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayer;
 
 public interface GridWorldListener {
 	
-	void onPlayerMoved(Player player);
+	void onPlayerMoved(GridWorldPlayer player);
 	
 	
 	default GridWorldListener adapter() {
 		return new GridWorldListener() {
-			@Override public void onPlayerMoved(Player player) {}
+			@Override public void onPlayerMoved(GridWorldPlayer player) {}
 		};
 	}
 }

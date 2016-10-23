@@ -3,7 +3,7 @@ package org.haw.ls.xancake.gridworld.game;
 import java.util.List;
 import java.util.Objects;
 import org.haw.ls.xancake.gridworld.game.action.GridWorldAction;
-import org.haw.ls.xancake.gridworld.game.player.PlayerBehaviour;
+import org.haw.ls.xancake.gridworld.game.player.GridWorldPlayerBehaviour;
 import org.haw.ls.xancake.gridworld.game.world.GridWorld;
 import org.haw.ls.xancake.gridworld.game.world.PlayableGridWorld;
 import de.xancake.pattern.listener.EventDispatcher;
@@ -12,11 +12,11 @@ public class GridWorldGame {
 	private EventDispatcher<GridWorldGameListener> _dispatcher;
 	
 	private PlayableGridWorld _world;
-	private PlayerBehaviour _playerBehaviour;
+	private GridWorldPlayerBehaviour _playerBehaviour;
 	private boolean _run;
 	private boolean _ended;
 	
-	public GridWorldGame(PlayableGridWorld world, PlayerBehaviour playerBehaviour) {
+	public GridWorldGame(PlayableGridWorld world, GridWorldPlayerBehaviour playerBehaviour) {
 		_dispatcher = new EventDispatcher<>();
 		_world = Objects.requireNonNull(world);
 		_playerBehaviour = Objects.requireNonNull(playerBehaviour);
