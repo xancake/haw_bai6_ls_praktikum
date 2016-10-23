@@ -132,7 +132,7 @@ public class JGridWorldPanel extends JPanel implements GridWorldPanel, GridWorld
 	}
 	
 	@Override
-	public void onPlayerMoved(GridWorldPlayer player) {
+	public void onPlayerMoved(GridWorld world, GridWorldPlayer player) {
 		repaint();
 	}
 }

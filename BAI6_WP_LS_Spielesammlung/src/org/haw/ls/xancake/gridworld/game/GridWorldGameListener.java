@@ -12,14 +12,4 @@ public interface GridWorldGameListener {
 	
 	
 	void onRoundEnded();
-	
-	
-	default GridWorldGameListener adapter() {
-		return new GridWorldGameListener() {
-			@Override public void onRoundStarted() {}
-			@Override public void onRoundEnded() {}
-			@Override public void onGameStarted() {}
-			@Override public void onGameEnded() {}
-		};
-	}
 }

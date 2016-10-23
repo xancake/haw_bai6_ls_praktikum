@@ -75,14 +75,14 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	public void doPlayerMove(GridWorldAction action) {
 		if(action.isAllowed(this)) {
 			action.execute(this);
-			_dispatcher.fireEvent(l -> l.onPlayerMoved(_player));
+			_dispatcher.fireEvent(l -> l.onPlayerMoved(this, _player));
 		}
 	}
 	
 	@Override
 	public void reset() {
 		_player.moveTo(_startField);
-		_dispatcher.fireEvent(l -> l.onPlayerMoved(_player));
+		_dispatcher.fireEvent(l -> l.onPlayerMoved(this, _player));
 	}
 	
 	@Override
