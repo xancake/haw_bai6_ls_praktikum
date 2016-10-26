@@ -5,11 +5,11 @@ public interface GridWorldGameListener {
 	void onGameStarted();
 	
 	
-	void onGameEnded();
-	
-	
 	void onRoundStarted();
 	
 	
 	void onRoundEnded();
+	
+	
+	void onGameEnded();
 }

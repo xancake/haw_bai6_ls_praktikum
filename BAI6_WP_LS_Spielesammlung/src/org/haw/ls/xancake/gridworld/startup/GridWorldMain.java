@@ -24,7 +24,6 @@ public class GridWorldMain {
 	private static class CLIBehaviour implements GridWorldPlayerBehaviour {
 		@Override
 		public GridWorldAction chooseAction(List<GridWorldAction> availableActions) {
-			System.out.println(_world);
 			GridWorldAction action;
 			do {
 				System.out.print("Aktion: ");
@@ -40,21 +39,21 @@ public class GridWorldMain {
 		public void onGameStarted() {
 			
 		}
-
+		
+		@Override
+		public void onRoundStarted() {
+			System.out.println(_world);
+		}
+		
+		@Override
+		public void onRoundEnded() {
+			
+		}
+		
 		@Override
 		public void onGameEnded() {
 			System.out.println(_world);
 			System.out.println("Game Over!");
-		}
-
-		@Override
-		public void onRoundStarted() {
-			
-		}
-
-		@Override
-		public void onRoundEnded() {
-			
 		}
 	}
 }
