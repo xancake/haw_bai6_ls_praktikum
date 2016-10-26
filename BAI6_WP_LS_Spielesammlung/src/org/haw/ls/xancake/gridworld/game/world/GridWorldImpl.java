@@ -65,6 +65,11 @@ public class GridWorldImpl implements PlayableGridWorld, MutableGridWorld {
 	}
 	
 	@Override
+	public List<GridWorldAction> getAllActions() {
+		return GridWorldAction.getAllActions();
+	}
+	
+	@Override
 	public List<GridWorldAction> getAllowedActions() {
 		// TODO: man könnte auch alle Aktionen zulassen. Dann müsste der Agent selbst lernen, dass die nichts bringen.
 //		return GridWorldAction.getAllowedActions(this);

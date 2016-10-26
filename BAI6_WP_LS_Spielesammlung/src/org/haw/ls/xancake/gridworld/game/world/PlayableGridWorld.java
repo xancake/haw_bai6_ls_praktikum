@@ -21,6 +21,12 @@ public interface PlayableGridWorld extends GridWorld {
 	boolean isGameOver();
 	
 	/**
+	 * Gibt alle Aktionen zurück, die grundsätzlich auf dieser Welt möglich sind.
+	 * @return Eine Liste aller Aktionen
+	 */
+	List<GridWorldAction> getAllActions();
+	
+	/**
 	 * Gibt die möglichen Aktionen des Spielers für die aktuelle Weltsituation zurück.
 	 * @return Die Aktionen, die dem Spieler möglich sind
 	 */
